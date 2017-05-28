@@ -72,8 +72,8 @@ public class DepartmentService {
     }
 
     @Transactional
-    public void deleteByMembersIn(List<AppUser> appUsers) {
-        departmentRepository.deleteByMembersIn(appUsers);
+    public void deleteByIdAndMembersIn(final String name, List<AppUser> appUsers) {
+        departmentRepository.deleteByMembersIn(name, appUsers);
     }
 
     public void delete(final Department department) {

@@ -20,5 +20,5 @@ public interface DepartmentRepository extends CrudRepository<Department, String>
 
     List<Department> findByMembersIn(List<AppUser> appUsers);
 
-    void deleteByMembersIn(List<AppUser> appUsers);
+    void deleteByMembersIn(String id, List<AppUser> appUsers);
 }
