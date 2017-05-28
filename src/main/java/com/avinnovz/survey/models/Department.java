@@ -6,6 +6,7 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -19,10 +20,9 @@ public class Department extends BaseModel {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @Column(unique = true)
     private String description;
 
-    @OneToMany
+    @ManyToMany
     @Fetch(value = FetchMode.JOIN)
     private List<AppUser> members;
 }
