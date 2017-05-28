@@ -8,6 +8,7 @@ import com.avinnovz.survey.dto.user.AppUserRegistrationDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.models.AppUser;
 import com.avinnovz.survey.services.AppUserService;
+import com.avinnovz.survey.services.DepartmentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

@@ -62,6 +62,16 @@ public class DepartmentService {
         return convert(departmentRepository.findOne(id));
     }
 
+    public List<DepartmentDto> findByMember(AppUser appUser) {
+        final ArrayList<DepartmentDto> departmentDtos = new ArrayList<>();
+        final ArrayList<AppUser> appUsers = new ArrayList<>();
+        appUsers.add(appUser);
+        for (Department d : departmentRepository.findByMembersIn(appUsers)) {
+            departmentDtos.add(convert(d));
+        }
+        return departmentDtos;
+    }
+
     public DepartmentDto convert(final Department department) {
         if (department == null) {
             return null;

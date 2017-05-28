@@ -2,9 +2,12 @@ package com.avinnovz.survey.controllers;
 
 import com.avinnovz.survey.dto.group.CreateDepartmentDto;
 import com.avinnovz.survey.dto.group.DepartmentDto;
+import com.avinnovz.survey.dto.user.AppUserDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.exceptions.NotFoundException;
+import com.avinnovz.survey.models.AppUser;
 import com.avinnovz.survey.models.Department;
+import com.avinnovz.survey.services.AppUserService;
 import com.avinnovz.survey.services.DepartmentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -12,6 +15,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +25,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -39,6 +46,9 @@ public class DepartmentController {
 
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private AppUserService appUserService;
 
     /**
      * create new department record
@@ -64,7 +74,7 @@ public class DepartmentController {
     }
 
     /**
-     * get user by id
+     * get department by id
      */
     @RequestMapping(value = "/departments/{id}",
             method = RequestMethod.GET,
@@ -79,5 +89,23 @@ public class DepartmentController {
         return Optional.ofNullable(departmentDto)
                 .map(result -> new ResponseEntity<>(departmentDto, HttpStatus.OK))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
+
+    /**
+     * get department by id
+     */
+    @RequestMapping(value = "/my_departments",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Bearer {{token}}",
+                    required = true, dataType = "string", paramType = "header")
+    })
+    public ResponseEntity<List<DepartmentDto>> getByMember(HttpServletRequest request) {
+        return Optional.ofNullable(request.getRemoteUser()).map(user -> {
+            final AppUser appUser = appUserService.findByUsername(user);
+            final List<DepartmentDto> departmentDtos = departmentService.findByMember(appUser);
+            return new ResponseEntity<>(departmentDtos, HttpStatus.OK);
+        }).orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null));
     }
 }
