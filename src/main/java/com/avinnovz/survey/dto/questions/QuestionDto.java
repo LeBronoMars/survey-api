@@ -1,8 +1,8 @@
-package com.avinnovz.survey.dto.questionnaire;
+package com.avinnovz.survey.dto.questions;
 
 import com.avinnovz.survey.dto.department.DepartmentDto;
-import com.avinnovz.survey.dto.questions.QuestionDto;
 import com.avinnovz.survey.dto.user.AppUserDto;
+import com.avinnovz.survey.enums.QuestionType;
 import com.avinnovz.survey.models.Question;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,7 +16,7 @@ import java.util.Set;
  * Created by rsbulanon on 5/28/17.
  */
 @Data
-public class QuestionnaireDto {
+public class QuestionDto {
 
     private String id;
 
@@ -34,11 +34,7 @@ public class QuestionnaireDto {
     private String name;
 
     @ApiModelProperty(example = "Lorem ipsum dolor")
-    private String description;
-
-    private DepartmentDto department;
-
-    private Set<QuestionDto> questions;
+    private QuestionType questionType;
 
     @ApiModelProperty(example = "user_id")
     @JsonProperty("created_by")

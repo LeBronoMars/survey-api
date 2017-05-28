@@ -2,9 +2,11 @@ package com.avinnovz.survey.services;
 
 import com.avinnovz.survey.dto.questionnaire.CreateQuestionnaireDto;
 import com.avinnovz.survey.dto.questionnaire.QuestionnaireDto;
+import com.avinnovz.survey.dto.questions.QuestionDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.models.AppUser;
 import com.avinnovz.survey.models.Department;
+import com.avinnovz.survey.models.Question;
 import com.avinnovz.survey.models.Questionnaire;
 import com.avinnovz.survey.repositories.QuestionnaireRepository;
 import org.slf4j.Logger;
@@ -14,7 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Created by rsbulanon on 5/28/17.
@@ -31,6 +35,9 @@ public class QuestionnaireService {
 
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private QuestionService questionService;
 
     public Questionnaire createQuestionnaire(final CreateQuestionnaireDto createQuestionnaireDto,
                                              final Department department, final AppUser appUser) {
@@ -90,6 +97,14 @@ public class QuestionnaireService {
             questionnaireDto.setActive(questionnaire.getActive());
             questionnaireDto.setName(questionnaire.getName());
             questionnaireDto.setDescription(questionnaire.getDescription());
+
+            final Set<QuestionDto> questionDtos = new LinkedHashSet<>();
+            if (questionnaire.getQuestions() != null && !questionnaire.getQuestions().isEmpty()) {
+                for (Question q : questionnaire.getQuestions()) {
+                    questionDtos.add(questionService.convert(q));
+                }
+            }
+            questionnaireDto.setQuestions(questionDtos);
             questionnaireDto.setCreatedBy(appUserService.convert(questionnaire.getCreatedBy()));
             questionnaireDto.setUpdatedBy(appUserService.convert(questionnaire.getUpdatedBy()));
             questionnaireDto.setDepartment(departmentService.convert(questionnaire.getDepartment()));
