@@ -1,7 +1,7 @@
 package com.avinnovz.survey.config;
 
 import com.avinnovz.survey.models.AppUser;
-import com.avinnovz.survey.repository.AppUserRepository;
+import com.avinnovz.survey.repositories.AppUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,4 +1,4 @@
-package com.avinnovz.survey.repository;
+package com.avinnovz.survey.repositories;
 
 import com.avinnovz.survey.models.AppUser;
 import org.springframework.data.domain.Page;
