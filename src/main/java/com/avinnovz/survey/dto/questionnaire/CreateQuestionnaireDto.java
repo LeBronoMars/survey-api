@@ -1,6 +1,5 @@
 package com.avinnovz.survey.dto.questionnaire;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -18,9 +17,4 @@ public class CreateQuestionnaireDto {
 
     @ApiModelProperty(example = "department_id")
     private String department;
-
-    @ApiModelProperty(example = "user_id")
-    @JsonProperty("created_by")
-    private String createdBy;
-
 }

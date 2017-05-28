@@ -38,4 +38,8 @@ public class QuestionnaireDto {
     @ApiModelProperty(example = "user_id")
     @JsonProperty("created_by")
     private AppUserDto createdBy;
+
+    @ApiModelProperty(example = "user_id")
+    @JsonProperty("updated_by")
+    private AppUserDto updatedBy;
 }

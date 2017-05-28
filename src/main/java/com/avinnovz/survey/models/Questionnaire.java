@@ -27,4 +27,8 @@ public class Questionnaire extends BaseModel {
     @OneToOne
     @Fetch(value = FetchMode.JOIN)
     private AppUser createdBy;
+
+    @OneToOne
+    @Fetch(value = FetchMode.JOIN)
+    private AppUser updatedBy;
 }

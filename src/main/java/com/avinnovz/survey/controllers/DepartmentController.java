@@ -77,7 +77,7 @@ public class DepartmentController {
     /**
      * get all departments
      */
-    @RequestMapping(value = "/departmnets",
+    @RequestMapping(value = "/departments",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional(readOnly = true)

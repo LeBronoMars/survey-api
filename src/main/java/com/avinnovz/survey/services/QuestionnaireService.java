@@ -44,8 +44,29 @@ public class QuestionnaireService {
             questionnaire.setDescription(createQuestionnaireDto.getDescription());
             questionnaire.setDepartment(department);
             questionnaire.setCreatedBy(appUser);
+            questionnaire.setUpdatedBy(appUser);
             return questionnaireRepository.save(questionnaire);
         }
+    }
+
+    public Questionnaire updateQuestionnaire(final Questionnaire questionnaire,  CreateQuestionnaireDto createQuestionnaireDto,
+                                             final Department department, final AppUser appUser) {
+        final Optional<Questionnaire> existingQuestionnaire = questionnaireRepository.findByDepartmentAndName(
+                department, createQuestionnaireDto.getName());
+
+        if (existingQuestionnaire.isPresent()) {
+            throw new CustomException("Questionnaire : '" + createQuestionnaireDto.getName() + "' already in use.");
+        } else {
+            questionnaire.setName(createQuestionnaireDto.getName());
+            questionnaire.setDescription(createQuestionnaireDto.getDescription());
+            questionnaire.setDepartment(department);
+            questionnaire.setUpdatedBy(appUser);
+            return questionnaireRepository.save(questionnaire);
+        }
+    }
+
+    public Questionnaire findOne(final String id) {
+        return questionnaireRepository.findOne(id);
     }
 
     public QuestionnaireDto convert(final Questionnaire questionnaire) {
@@ -60,6 +81,7 @@ public class QuestionnaireService {
             questionnaireDto.setName(questionnaire.getName());
             questionnaireDto.setDescription(questionnaire.getDescription());
             questionnaireDto.setCreatedBy(appUserService.convert(questionnaire.getCreatedBy()));
+            questionnaireDto.setUpdatedBy(appUserService.convert(questionnaire.getUpdatedBy()));
             questionnaireDto.setDepartment(departmentService.convert(questionnaire.getDepartment()));
             return questionnaireDto;
         }
