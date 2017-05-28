@@ -22,7 +22,7 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("San Mateo Teachers")
+                .groupName("Survey App")
                 .apiInfo(apiInfo())
                 //.host("54.251.151.101:9000")
                 .host("localhost:9000")

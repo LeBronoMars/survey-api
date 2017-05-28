@@ -10,6 +10,8 @@ import com.avinnovz.survey.repositories.QuestionnaireRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -67,6 +69,14 @@ public class QuestionnaireService {
 
     public Questionnaire findOne(final String id) {
         return questionnaireRepository.findOne(id);
+    }
+
+    public Page<QuestionnaireDto> findAll(Pageable pageable) {
+        return questionnaireRepository.findAll(pageable).map(source -> convert(source));
+    }
+
+    public Page<QuestionnaireDto> findByDepartment(Department department, Pageable pageable) {
+        return questionnaireRepository.findByDepartment(department, pageable).map(source -> convert(source));
     }
 
     public QuestionnaireDto convert(final Questionnaire questionnaire) {

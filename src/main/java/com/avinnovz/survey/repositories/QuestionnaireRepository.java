@@ -16,4 +16,6 @@ public interface QuestionnaireRepository extends CrudRepository<Questionnaire, S
     Page<Questionnaire> findAll(Pageable pageable);
 
     Optional<Questionnaire> findByDepartmentAndName(Department department, String name);
+
+    Page<Questionnaire> findByDepartment(Department department, Pageable pageable);
 }
