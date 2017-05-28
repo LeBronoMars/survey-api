@@ -100,9 +100,12 @@ public class QuestionnaireService {
 
             final Set<QuestionDto> questionDtos = new LinkedHashSet<>();
             if (questionnaire.getQuestions() != null && !questionnaire.getQuestions().isEmpty()) {
+                log.info("QUESTIONS SIZE ---> " + questionnaire.getQuestions().size());
                 for (Question q : questionnaire.getQuestions()) {
                     questionDtos.add(questionService.convert(q));
                 }
+            } else {
+                log.info("QUESTIONS IS EMPTY ");
             }
             questionnaireDto.setQuestions(questionDtos);
             questionnaireDto.setCreatedBy(appUserService.convert(questionnaire.getCreatedBy()));

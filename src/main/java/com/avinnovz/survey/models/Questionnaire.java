@@ -4,11 +4,8 @@ import lombok.Data;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import java.util.Set;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by rsbulanon on 5/28/17.
@@ -26,9 +23,9 @@ public class Questionnaire extends BaseModel {
     @Fetch(value = FetchMode.JOIN)
     private Department department;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "questionnaire", cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
-    private Set<Question> questions;
+    private List<Question> questions;
 
     @OneToOne
     @Fetch(value = FetchMode.JOIN)

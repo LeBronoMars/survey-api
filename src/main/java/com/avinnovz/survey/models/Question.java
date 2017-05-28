@@ -25,6 +25,9 @@ public class Question extends BaseModel {
     @JsonProperty("question_type")
     private QuestionType questionType;
 
+    @ManyToOne
+    private Questionnaire questionnaire;
+
     @OneToOne
     @Fetch(value = FetchMode.JOIN)
     private AppUser createdBy;

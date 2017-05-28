@@ -1,9 +1,7 @@
 package com.avinnovz.survey.controllers;
 
-import com.avinnovz.survey.dto.department.DepartmentDto;
 import com.avinnovz.survey.dto.questionnaire.CreateQuestionnaireDto;
 import com.avinnovz.survey.dto.questionnaire.QuestionnaireDto;
-import com.avinnovz.survey.dto.user.AppUserDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.exceptions.NotFoundException;
 import com.avinnovz.survey.models.AppUser;
@@ -35,7 +33,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
-import java.util.Optional;
 
 /**
  * Created by rsbulanon on 5/28/17.

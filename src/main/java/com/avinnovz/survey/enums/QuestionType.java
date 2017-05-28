@@ -5,7 +5,7 @@ package com.avinnovz.survey.enums;
  */
 public enum QuestionType {
 
-    MULTILPLE_CHOICES,
+    MULTIPLE_CHOICES,
 
     INPUT
 }
