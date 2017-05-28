@@ -1,8 +1,8 @@
 package com.avinnovz.survey.controllers;
 
-import com.avinnovz.survey.dto.department.AddMemberToDepartmentDto;
 import com.avinnovz.survey.dto.department.CreateDepartmentDto;
 import com.avinnovz.survey.dto.department.DepartmentDto;
+import com.avinnovz.survey.dto.department.MembersDepartmentDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.exceptions.NotFoundException;
 import com.avinnovz.survey.models.AppUser;
@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -117,21 +118,53 @@ public class DepartmentController {
             @ApiImplicitParam(name = "Authorization", value = "Bearer {{token}}",
                     required = true, dataType = "string", paramType = "header")
     })
-    public ResponseEntity<?> addMemberToDepartment(@Valid @RequestBody AddMemberToDepartmentDto
-                                                                      addMemberToDepartmentDto) {
-        log.info("REST request to add member to department : {}", addMemberToDepartmentDto);
-        final Department department = departmentService.findDepartmentById(addMemberToDepartmentDto.getDepartmentId());
+    public ResponseEntity<?> addMemberToDepartment(@Valid @RequestBody MembersDepartmentDto
+                                                           membersDepartmentDto) {
+        log.info("REST request to add member to department : {}", membersDepartmentDto);
+        final Department department = departmentService.findDepartmentById(membersDepartmentDto.getDepartmentId());
 
         if (department == null) {
             return new ResponseEntity<>(Collections.singletonMap("message", "Department not found."), HttpStatus.NOT_FOUND);
         } else {
 
-            for (String memberId : addMemberToDepartmentDto.getMembers()) {
+            for (String memberId : membersDepartmentDto.getMembers()) {
                 final AppUser appUser = appUserService.findOne(memberId);
                 if (appUser != null)  {
                     final List<DepartmentDto> departmentDto = departmentService.findByMember(appUser);
                     if (departmentDto == null || departmentDto.isEmpty()) {
                         department.getMembers().add(appUser);
+                    }
+                }
+            }
+            departmentService.update(department);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Department member successfully updated."));
+        }
+    }
+
+    /**
+     * remove member to department
+     */
+    @RequestMapping(value = "/departments/remove_member",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Bearer {{token}}",
+                    required = true, dataType = "string", paramType = "header")
+    })
+    public ResponseEntity<?> removeMemberFromDepartment(@Valid @RequestBody MembersDepartmentDto
+                                                                membersDepartmentDto) {
+        log.info("REST request to remove member(s0 from department : {}", membersDepartmentDto);
+        final Department department = departmentService.findDepartmentById(membersDepartmentDto.getDepartmentId());
+
+        if (department == null) {
+            return new ResponseEntity<>(Collections.singletonMap("message", "Department not found."), HttpStatus.NOT_FOUND);
+        } else {
+            for (String memberId : membersDepartmentDto.getMembers()) {
+                final AppUser appUser = appUserService.findOne(memberId);
+                if (appUser != null)  {
+                    final List<DepartmentDto> departmentDto = departmentService.findByMember(appUser);
+                    if (departmentDto != null && !departmentDto.isEmpty()) {
+                        department.getMembers().remove(appUser);
                     }
                 }
             }

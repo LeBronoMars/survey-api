@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -70,6 +71,15 @@ public class DepartmentService {
         return departmentRepository.save(department);
     }
 
+    @Transactional
+    public void deleteByMembersIn(List<AppUser> appUsers) {
+        departmentRepository.deleteByMembersIn(appUsers);
+    }
+
+    public void delete(final Department department) {
+        departmentRepository.delete(department);
+    }
+
     public List<DepartmentDto> findByMember(AppUser appUser) {
         final ArrayList<DepartmentDto> departmentDtos = new ArrayList<>();
         final ArrayList<AppUser> appUsers = new ArrayList<>();
@@ -78,6 +88,13 @@ public class DepartmentService {
             departmentDtos.add(convert(d));
         }
         return departmentDtos;
+    }
+
+    public List<Department> findDepartmentsByMember(AppUser appUser) {
+        final ArrayList<DepartmentDto> departmentDtos = new ArrayList<>();
+        final ArrayList<AppUser> appUsers = new ArrayList<>();
+        appUsers.add(appUser);
+        return departmentRepository.findByMembersIn(appUsers);
     }
 
     public DepartmentDto convert(final Department department) {

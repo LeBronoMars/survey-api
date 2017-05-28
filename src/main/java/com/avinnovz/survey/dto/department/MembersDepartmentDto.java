@@ -10,7 +10,7 @@ import java.util.List;
  * Created by rsbulanon on 5/28/17.
  */
 @Data
-public class AddMemberToDepartmentDto {
+public class MembersDepartmentDto {
 
     @JsonProperty("department_id")
     @ApiModelProperty(example = "deparment id")
@@ -18,4 +18,5 @@ public class AddMemberToDepartmentDto {
 
     @ApiModelProperty(example = "[{user_id}]")
     private List<String> members;
+
 }

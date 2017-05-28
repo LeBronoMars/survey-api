@@ -18,5 +18,7 @@ public interface DepartmentRepository extends CrudRepository<Department, String>
 
     Page<Department> findAll(Pageable pageable);
 
-    List<Department> findByMembersIn(List<AppUser> appUser);
+    List<Department> findByMembersIn(List<AppUser> appUsers);
+
+    void deleteByMembersIn(List<AppUser> appUsers);
 }
