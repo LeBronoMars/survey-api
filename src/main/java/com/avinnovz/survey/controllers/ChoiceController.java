@@ -84,6 +84,43 @@ public class ChoiceController {
     }
 
     /**
+     * update existing choice
+     */
+    @RequestMapping(value = "/choice/{id}",
+            method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Bearer {{token}}",
+                    required = true, dataType = "string", paramType = "header")
+    })
+    public ResponseEntity<?> updateChoice(@PathVariable String id, @Valid @RequestBody CreateChoiceDto createChoiceDto) throws URISyntaxException {
+        log.info("REST request to create new choice : {}", createChoiceDto);
+        try {
+            final Question question = questionService.findOne(createChoiceDto.getQuestionId());
+
+            if (question == null) {
+                return new ResponseEntity<>(Collections.singletonMap("message", "Question record not found."), HttpStatus.NOT_FOUND);
+            } else {
+                if (question.getQuestionType() == QuestionType.INPUT) {
+                    return new ResponseEntity<>(Collections.singletonMap("message", "Creating of choice is for questions with question type of MULTIPLE_CHOICES only."), HttpStatus.BAD_REQUEST);
+                } else {
+                    final Choice existingChoice = choiceService.findOne(id);
+                    if (existingChoice == null) {
+                        return new ResponseEntity<>(Collections.singletonMap("message", "Choice record not found."), HttpStatus.NOT_FOUND);
+                    } else {
+                        choiceService.updateChoice(createChoiceDto, existingChoice);
+                        return new ResponseEntity<>(Collections.singletonMap("message", "Choice updated."), HttpStatus.CREATED);
+                    }
+                }
+            }
+        } catch (CustomException e) {
+            return new ResponseEntity<>(Collections.singletonMap("message", e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(Collections.singletonMap("message", e.getLocalizedMessage()), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /**
      * delete choice
      * */
     @RequestMapping(value = "/choice/{id}",

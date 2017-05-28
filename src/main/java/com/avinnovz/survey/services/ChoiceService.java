@@ -37,6 +37,19 @@ public class ChoiceService {
         }
     }
 
+    public Choice updateChoice(final CreateChoiceDto createChoiceDto, final Choice choice) {
+        final Optional<Choice> existingChoice = choiceRepository.findByQuestionAndNameAndIdNot(createChoiceDto.getQuestionId(),
+                createChoiceDto.getName(), choice.getId());
+
+        if (existingChoice.isPresent()) {
+            throw new CustomException("Choice : '" + createChoiceDto.getName() + "' already in use.");
+        } else {
+            choice.setName(createChoiceDto.getName());
+            choice.setQuestion(createChoiceDto.getQuestionId());
+            return choiceRepository.save(choice);
+        }
+    }
+
     public void delete(final Choice choice) {
         choiceRepository.delete(choice);
     }
