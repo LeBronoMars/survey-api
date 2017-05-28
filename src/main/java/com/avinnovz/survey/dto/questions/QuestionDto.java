@@ -1,9 +1,9 @@
 package com.avinnovz.survey.dto.questions;
 
-import com.avinnovz.survey.dto.department.DepartmentDto;
+import com.avinnovz.survey.dto.choice.ChoiceDto;
+import com.avinnovz.survey.dto.choice.CreateChoiceDto;
 import com.avinnovz.survey.dto.user.AppUserDto;
 import com.avinnovz.survey.enums.QuestionType;
-import com.avinnovz.survey.models.Question;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
@@ -35,6 +35,8 @@ public class QuestionDto {
 
     @ApiModelProperty(example = "Lorem ipsum dolor")
     private QuestionType questionType;
+
+    private Set<ChoiceDto> choices;
 
     @ApiModelProperty(example = "user_id")
     @JsonProperty("created_by")

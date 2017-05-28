@@ -8,6 +8,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by rsbulanon on 5/28/17.
@@ -27,6 +28,10 @@ public class Question extends BaseModel {
 
     @ManyToOne
     private Questionnaire questionnaire;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "question", cascade = CascadeType.ALL)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<Choice> choices;
 
     @OneToOne
     @Fetch(value = FetchMode.JOIN)

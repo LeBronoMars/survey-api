@@ -41,7 +41,7 @@ import java.util.Collections;
 @RequestMapping(path = "/api")
 @Api(value = "Questionnaire Module")
 public class QuestionnaireController {
-    private final Logger log = LoggerFactory.getLogger(Questionnaire.class);
+    private final Logger log = LoggerFactory.getLogger(QuestionnaireController.class);
 
     @Autowired
     private DepartmentService departmentService;

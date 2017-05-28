@@ -1,5 +1,6 @@
 package com.avinnovz.survey.repositories;
 
+import com.avinnovz.survey.enums.QuestionType;
 import com.avinnovz.survey.models.Question;
 import com.avinnovz.survey.models.Questionnaire;
 import org.springframework.data.repository.CrudRepository;
@@ -11,5 +12,5 @@ import java.util.Optional;
  */
 public interface QuestionRepository extends CrudRepository<Question, String> {
 
-    Optional<Question> findByQuestionnaireAndName(Questionnaire questionnaire, String name);
+    Optional<Question> findByQuestionnaireAndNameAndQuestionType(Questionnaire questionnaire, String name, QuestionType questionType);
 }
