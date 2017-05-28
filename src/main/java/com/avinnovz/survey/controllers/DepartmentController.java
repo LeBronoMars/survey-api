@@ -1,8 +1,8 @@
 package com.avinnovz.survey.controllers;
 
-import com.avinnovz.survey.dto.group.CreateDepartmentDto;
-import com.avinnovz.survey.dto.group.DepartmentDto;
-import com.avinnovz.survey.dto.user.AppUserDto;
+import com.avinnovz.survey.dto.department.AddMemberToDepartmentDto;
+import com.avinnovz.survey.dto.department.CreateDepartmentDto;
+import com.avinnovz.survey.dto.department.DepartmentDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.exceptions.NotFoundException;
 import com.avinnovz.survey.models.AppUser;
@@ -15,7 +15,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +59,7 @@ public class DepartmentController {
                     required = true, dataType = "string", paramType = "header")
     })
     public ResponseEntity<?> createDepartment(@Valid @RequestBody CreateDepartmentDto createDepartmentDto) throws URISyntaxException {
-        log.info("REST request to create new group : {}", createDepartmentDto);
+        log.info("REST request to create new department : {}", createDepartmentDto);
         try {
             final Department newDepartment = departmentService.createDepartment(createDepartmentDto);
             final DepartmentDto departmentDto = departmentService.findOne(newDepartment.getId());
@@ -92,7 +90,7 @@ public class DepartmentController {
     }
 
     /**
-     * get department by id
+     * get departments of currently logged in member
      */
     @RequestMapping(value = "/my_departments",
             method = RequestMethod.GET,
@@ -101,11 +99,44 @@ public class DepartmentController {
             @ApiImplicitParam(name = "Authorization", value = "Bearer {{token}}",
                     required = true, dataType = "string", paramType = "header")
     })
-    public ResponseEntity<List<DepartmentDto>> getByMember(HttpServletRequest request) {
+    public ResponseEntity<List<DepartmentDto>> getDepartmentsOfMember(HttpServletRequest request) {
         return Optional.ofNullable(request.getRemoteUser()).map(user -> {
             final AppUser appUser = appUserService.findByUsername(user);
             final List<DepartmentDto> departmentDtos = departmentService.findByMember(appUser);
             return new ResponseEntity<>(departmentDtos, HttpStatus.OK);
         }).orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null));
+    }
+
+    /**
+     * add member to department
+     */
+    @RequestMapping(value = "/departments/add_member",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Bearer {{token}}",
+                    required = true, dataType = "string", paramType = "header")
+    })
+    public ResponseEntity<?> addMemberToDepartment(@Valid @RequestBody AddMemberToDepartmentDto
+                                                                      addMemberToDepartmentDto) {
+        log.info("REST request to add member to department : {}", addMemberToDepartmentDto);
+        final Department department = departmentService.findDepartmentById(addMemberToDepartmentDto.getDepartmentId());
+
+        if (department == null) {
+            return new ResponseEntity<>(Collections.singletonMap("message", "Department not found."), HttpStatus.NOT_FOUND);
+        } else {
+
+            for (String memberId : addMemberToDepartmentDto.getMembers()) {
+                final AppUser appUser = appUserService.findOne(memberId);
+                if (appUser != null)  {
+                    final List<DepartmentDto> departmentDto = departmentService.findByMember(appUser);
+                    if (departmentDto == null || departmentDto.isEmpty()) {
+                        department.getMembers().add(appUser);
+                    }
+                }
+            }
+            departmentService.update(department);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Department member successfully updated."));
+        }
     }
 }

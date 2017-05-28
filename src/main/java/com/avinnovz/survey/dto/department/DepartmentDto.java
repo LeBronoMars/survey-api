@@ -1,4 +1,4 @@
-package com.avinnovz.survey.dto.group;
+package com.avinnovz.survey.dto.department;
 
 import com.avinnovz.survey.dto.user.AppUserDto;
 import com.fasterxml.jackson.annotation.JsonFormat;

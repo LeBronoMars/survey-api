@@ -1,4 +1,4 @@
-package com.avinnovz.survey.dto.group;
+package com.avinnovz.survey.dto.department;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

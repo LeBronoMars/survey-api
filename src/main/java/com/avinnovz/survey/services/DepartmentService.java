@@ -1,7 +1,7 @@
 package com.avinnovz.survey.services;
 
-import com.avinnovz.survey.dto.group.CreateDepartmentDto;
-import com.avinnovz.survey.dto.group.DepartmentDto;
+import com.avinnovz.survey.dto.department.CreateDepartmentDto;
+import com.avinnovz.survey.dto.department.DepartmentDto;
 import com.avinnovz.survey.dto.user.AppUserDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.models.AppUser;
@@ -60,6 +60,14 @@ public class DepartmentService {
 
     public DepartmentDto findOne(final String id) {
         return convert(departmentRepository.findOne(id));
+    }
+
+    public Department findDepartmentById(final String departmentId) {
+        return departmentRepository.findOne(departmentId);
+    }
+
+    public Department update(final Department department) {
+        return departmentRepository.save(department);
     }
 
     public List<DepartmentDto> findByMember(AppUser appUser) {
