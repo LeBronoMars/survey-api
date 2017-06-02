@@ -34,7 +34,7 @@ public class QuestionService {
     public Question createQuestion(final CreateQuestionDto createQuestionDto, final Questionnaire questionnaire,
                              final AppUser appUser) {
         final Optional<Question> existingQuestionnaire = questionRepository.findByQuestionnaireAndNameAndQuestionType(
-                questionnaire, createQuestionDto.getName(), createQuestionDto.getQuestionType());
+                createQuestionDto.getQuestionnaire(), createQuestionDto.getName(), createQuestionDto.getQuestionType());
 
         if (existingQuestionnaire.isPresent()) {
             throw new CustomException("Question : '" + createQuestionDto.getName() + "' already in use.");
@@ -43,7 +43,7 @@ public class QuestionService {
             question.setId(null);
             question.setName(createQuestionDto.getName());
             question.setQuestionType(createQuestionDto.getQuestionType());
-            question.setQuestionnaire(questionnaire);
+            question.setQuestionnaire(createQuestionDto.getQuestionnaire());
             question.setCreatedBy(appUser);
             question.setUpdatedBy(appUser);
             return questionRepository.save(question);
@@ -53,21 +53,31 @@ public class QuestionService {
     public Question updateQuestion(final CreateQuestionDto createQuestionDto, final Questionnaire questionnaire,
                                    final AppUser appUser, final Question question) {
         final Optional<Question> existingQuestionnaire = questionRepository.findByQuestionnaireAndNameAndQuestionType(
-                questionnaire, createQuestionDto.getName(), createQuestionDto.getQuestionType());
+                createQuestionDto.getQuestionnaire(), createQuestionDto.getName(), createQuestionDto.getQuestionType());
 
         if (existingQuestionnaire.isPresent()) {
             throw new CustomException("Question : '" + createQuestionDto.getName() + "' already in use.");
         } else {
             question.setName(createQuestionDto.getName());
             question.setQuestionType(createQuestionDto.getQuestionType());
-            question.setQuestionnaire(questionnaire);
+            question.setQuestionnaire(createQuestionDto.getQuestionnaire());
             question.setUpdatedBy(appUser);
             return questionRepository.save(question);
         }
     }
 
+    public void delete(Question question) {
+        questionRepository.delete(question);
+    }
+
     public Question findOne(String id) {
         return questionRepository.findOne(id);
+    }
+
+
+    public void deleteQuestion(final Question question) {
+        question.setActive(false);
+        questionRepository.save(question);
     }
 
     public QuestionDto convert(final Question question) {

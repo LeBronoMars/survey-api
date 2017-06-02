@@ -4,6 +4,7 @@ import com.avinnovz.survey.dto.choice.ChoiceDto;
 import com.avinnovz.survey.dto.choice.CreateChoiceDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.models.Choice;
+import com.avinnovz.survey.models.Question;
 import com.avinnovz.survey.repositories.ChoiceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,11 @@ public class ChoiceService {
 
     public void delete(final Choice choice) {
         choiceRepository.delete(choice);
+    }
+
+    @Transactional
+    public void deleteAllByQuestion(final String question) {
+        choiceRepository.deleteByQuestion(question);
     }
 
     @Transactional

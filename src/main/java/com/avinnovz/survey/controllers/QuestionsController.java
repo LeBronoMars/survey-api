@@ -5,12 +5,10 @@ import com.avinnovz.survey.dto.questions.QuestionDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.exceptions.NotFoundException;
 import com.avinnovz.survey.models.AppUser;
+import com.avinnovz.survey.models.Choice;
 import com.avinnovz.survey.models.Question;
 import com.avinnovz.survey.models.Questionnaire;
-import com.avinnovz.survey.services.AppUserService;
-import com.avinnovz.survey.services.DepartmentService;
-import com.avinnovz.survey.services.QuestionService;
-import com.avinnovz.survey.services.QuestionnaireService;
+import com.avinnovz.survey.services.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -31,6 +29,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
+import java.util.Optional;
 
 /**
  * Created by rsbulanon on 5/28/17.
@@ -52,6 +51,9 @@ public class QuestionsController {
 
     @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    private ChoiceService choiceService;
 
     /**
      * create new question record
@@ -118,4 +120,24 @@ public class QuestionsController {
         }
     }
 
+    /**
+     * delete question
+     * */
+    @RequestMapping(value = "/question/{id}",
+            method = RequestMethod.DELETE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Bearer {{token}}",
+                    required = true, dataType = "string", paramType = "header")
+    })
+    public ResponseEntity<?> deleteQuestion(@PathVariable String id) throws URISyntaxException {
+        Question question = questionService.findOne(id);
+        return Optional.ofNullable(question)
+                .map(result -> {
+                    choiceService.deleteAllByQuestion(question.getId());
+                    questionService.delete(question);
+                    return new ResponseEntity<>(Collections.singletonMap("message", "Question successfully deleted."), HttpStatus.OK);
+                })
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
 }

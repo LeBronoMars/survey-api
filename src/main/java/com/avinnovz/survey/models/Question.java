@@ -26,8 +26,7 @@ public class Question extends BaseModel {
     @JsonProperty("question_type")
     private QuestionType questionType;
 
-    @ManyToOne
-    private Questionnaire questionnaire;
+    private String questionnaire;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "question", cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)

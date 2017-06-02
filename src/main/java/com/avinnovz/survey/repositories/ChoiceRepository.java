@@ -15,4 +15,6 @@ public interface ChoiceRepository extends CrudRepository<Choice, String> {
     Optional<Choice> findByQuestionAndNameAndIdNot(String question, String name, String id);
 
     void deleteById(String id);
+
+    void deleteByQuestion(String question);
 }

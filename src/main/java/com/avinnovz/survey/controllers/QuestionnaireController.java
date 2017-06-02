@@ -8,6 +8,7 @@ import com.avinnovz.survey.models.AppUser;
 import com.avinnovz.survey.models.Department;
 import com.avinnovz.survey.models.Questionnaire;
 import com.avinnovz.survey.services.AppUserService;
+import com.avinnovz.survey.services.ChoiceService;
 import com.avinnovz.survey.services.DepartmentService;
 import com.avinnovz.survey.services.QuestionnaireService;
 import io.swagger.annotations.Api;
@@ -51,6 +52,9 @@ public class QuestionnaireController {
 
     @Autowired
     private QuestionnaireService questionnaireService;
+
+    @Autowired
+    private ChoiceService choiceService;
 
     /**
      * create new questionnaire record

@@ -12,5 +12,5 @@ import java.util.Optional;
  */
 public interface QuestionRepository extends CrudRepository<Question, String> {
 
-    Optional<Question> findByQuestionnaireAndNameAndQuestionType(Questionnaire questionnaire, String name, QuestionType questionType);
+    Optional<Question> findByQuestionnaireAndNameAndQuestionType(String questionnaire, String name, QuestionType questionType);
 }
