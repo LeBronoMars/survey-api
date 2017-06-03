@@ -19,12 +19,4 @@ public class SimplifiedQuestionDto {
 
     @ApiModelProperty(example = "Lorem ipsum dolor")
     private QuestionType questionType;
-
-    @ApiModelProperty(example = "user_id")
-    @JsonProperty("created_by")
-    private SimplifiedAppUserDto createdBy;
-
-    @ApiModelProperty(example = "user_id")
-    @JsonProperty("updated_by")
-    private SimplifiedAppUserDto updatedBy;
 }

@@ -114,10 +114,7 @@ public class QuestionService {
             questionDto.setId(question.getId());
             questionDto.setName(question.getName());
             questionDto.setQuestionType(question.getQuestionType());
-            questionDto.setCreatedBy(appUserService.simpleUser(question.getCreatedBy()));
-            questionDto.setUpdatedBy(appUserService.simpleUser(question.getUpdatedBy()));
             return questionDto;
         }
     }
-
 }

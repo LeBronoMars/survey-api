@@ -2,6 +2,7 @@ package com.avinnovz.survey.services;
 
 import com.avinnovz.survey.dto.questionnaire.CreateQuestionnaireDto;
 import com.avinnovz.survey.dto.questionnaire.QuestionnaireDto;
+import com.avinnovz.survey.dto.questionnaire.SimplifiedQuestionnaireDto;
 import com.avinnovz.survey.dto.questions.QuestionDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.models.AppUser;
@@ -109,6 +110,20 @@ public class QuestionnaireService {
             questionnaireDto.setCreatedBy(appUserService.simpleUser(questionnaire.getCreatedBy()));
             questionnaireDto.setUpdatedBy(appUserService.simpleUser(questionnaire.getUpdatedBy()));
             questionnaireDto.setDepartment(departmentService.convert(questionnaire.getDepartment()));
+            return questionnaireDto;
+        }
+    }
+
+    public SimplifiedQuestionnaireDto simplifiedQuestionnaire(final Questionnaire questionnaire) {
+        if (questionnaire == null) {
+            return null;
+        } else {
+            final SimplifiedQuestionnaireDto questionnaireDto = new SimplifiedQuestionnaireDto();
+            questionnaireDto.setId(questionnaire.getId());
+            questionnaireDto.setCreatedAt(questionnaire.getCreatedAt());
+            questionnaireDto.setUpdatedAt(questionnaire.getUpdatedAt());
+            questionnaireDto.setName(questionnaire.getName());
+            questionnaireDto.setDescription(questionnaire.getDescription());
             return questionnaireDto;
         }
     }

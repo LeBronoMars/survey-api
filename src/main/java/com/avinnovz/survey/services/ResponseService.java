@@ -14,6 +14,8 @@ import com.avinnovz.survey.repositories.ResponseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,6 +35,9 @@ public class ResponseService {
 
     @Autowired
     private AppUserService appUserService;
+
+    @Autowired
+    private QuestionnaireService questionnaireService;
 
     @Autowired
     private QuestionService questionService;
@@ -65,10 +70,12 @@ public class ResponseService {
             final Answer answer = new Answer();
             answer.setId(null);
             answer.setResponse(response.getId());
+            answer.setQuestionId(createAnswerDto.getQuestionId());
+            answer.setQuestionMode(createAnswerDto.getQuestionMode());
 
-            if (createAnswerDto.getQuestionMode() == QuestionType.MULTIPLE_CHOICES.toString()) {
-                answer.setQuestionId(createAnswerDto.getQuestionId());
-                answer.setQuestionMode(createAnswerDto.getQuestionMode());
+            log.info("REQUEST 0. QUESTION MODE {}", createAnswerDto.getQuestionMode());
+
+            if (createAnswerDto.getQuestionMode().equals(QuestionType.MULTIPLE_CHOICES.toString())) {
                 answer.setChoiceId(createAnswerDto.getChoiceId());
                 answer.setAnswer(null);
             } else {
@@ -82,6 +89,17 @@ public class ResponseService {
         return response;
     }
 
+    public Page<ResponseDto> findByConductedBy(AppUser appUser, Pageable pageable) {
+        return responseRepository.findByConductedBy(appUser, pageable).map(source -> convert(source));
+    }
+
+    public Page<ResponseDto> findByQuestionnaire(Questionnaire questionnaire, Pageable pageable) {
+        return responseRepository.findByQuestionnaire(questionnaire, pageable).map(source -> convert(source));
+    }
+
+    public Page<ResponseDto> findAll(Pageable pageable) {
+        return responseRepository.findAll(pageable).map(source -> convert(source));
+    }
 
     public ResponseDto convert(final Response response) {
         if (response == null) {
@@ -102,6 +120,8 @@ public class ResponseService {
             responseDto.setGender(response.getGender());
             responseDto.setLatitude(response.getLatitude());
             responseDto.setLongitude(response.getLongitude());
+
+            responseDto.setQuestionnaire(questionnaireService.simplifiedQuestionnaire(response.getQuestionnaire()));
 
             final ArrayList<AnswerDto> answerDtos = new ArrayList<>();
 
