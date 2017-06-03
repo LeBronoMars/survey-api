@@ -5,7 +5,6 @@ import com.avinnovz.survey.dto.questions.QuestionDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.exceptions.NotFoundException;
 import com.avinnovz.survey.models.AppUser;
-import com.avinnovz.survey.models.Choice;
 import com.avinnovz.survey.models.Question;
 import com.avinnovz.survey.models.Questionnaire;
 import com.avinnovz.survey.services.*;
