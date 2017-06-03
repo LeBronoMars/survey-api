@@ -3,6 +3,7 @@ package com.avinnovz.survey.dto.questionnaire;
 import com.avinnovz.survey.dto.department.DepartmentDto;
 import com.avinnovz.survey.dto.questions.QuestionDto;
 import com.avinnovz.survey.dto.user.AppUserDto;
+import com.avinnovz.survey.dto.user.SimplifiedAppUserDto;
 import com.avinnovz.survey.models.Question;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -42,9 +43,9 @@ public class QuestionnaireDto {
 
     @ApiModelProperty(example = "user_id")
     @JsonProperty("created_by")
-    private AppUserDto createdBy;
+    private SimplifiedAppUserDto createdBy;
 
     @ApiModelProperty(example = "user_id")
     @JsonProperty("updated_by")
-    private AppUserDto updatedBy;
+    private SimplifiedAppUserDto updatedBy;
 }

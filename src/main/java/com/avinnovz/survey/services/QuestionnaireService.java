@@ -106,8 +106,8 @@ public class QuestionnaireService {
             }
 
             questionnaireDto.setQuestions(questionDtos);
-            questionnaireDto.setCreatedBy(appUserService.convert(questionnaire.getCreatedBy()));
-            questionnaireDto.setUpdatedBy(appUserService.convert(questionnaire.getUpdatedBy()));
+            questionnaireDto.setCreatedBy(appUserService.simpleUser(questionnaire.getCreatedBy()));
+            questionnaireDto.setUpdatedBy(appUserService.simpleUser(questionnaire.getUpdatedBy()));
             questionnaireDto.setDepartment(departmentService.convert(questionnaire.getDepartment()));
             return questionnaireDto;
         }

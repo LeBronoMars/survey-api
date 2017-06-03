@@ -1,9 +1,8 @@
 package com.avinnovz.survey.dto.answer;
 
 import com.avinnovz.survey.dto.choice.ChoiceDto;
-import com.avinnovz.survey.dto.questions.QuestionDto;
+import com.avinnovz.survey.dto.questions.SimplifiedQuestionDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -12,7 +11,7 @@ import lombok.Data;
 @Data
 public class AnswerDto {
 
-    private QuestionDto questionDto;
+    private SimplifiedQuestionDto question;
 
     @JsonProperty("question_mode")
     private String questionMode;

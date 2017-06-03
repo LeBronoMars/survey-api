@@ -3,6 +3,7 @@ package com.avinnovz.survey.dto.response;
 import com.avinnovz.survey.dto.answer.AnswerDto;
 import com.avinnovz.survey.dto.questionnaire.QuestionnaireDto;
 import com.avinnovz.survey.dto.user.AppUserDto;
+import com.avinnovz.survey.dto.user.SimplifiedAppUserDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -56,5 +57,5 @@ public class ResponseDto {
     private List<AnswerDto> answers;
 
     @JsonProperty("conducted_by")
-    private AppUserDto conductedBy;
+    private SimplifiedAppUserDto conductedBy;
 }

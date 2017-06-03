@@ -3,6 +3,7 @@ package com.avinnovz.survey.services;
 
 import com.avinnovz.survey.dto.user.AppUserDto;
 import com.avinnovz.survey.dto.user.AppUserRegistrationDto;
+import com.avinnovz.survey.dto.user.SimplifiedAppUserDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.exceptions.NotFoundException;
 import com.avinnovz.survey.models.AppUser;
@@ -110,6 +111,19 @@ public class AppUserService {
         userDto.setPicUrl(appUser.getPicUrl());
         userDto.setGender(appUser.getGender());
         userDto.setSynced(appUser.isSynced());
+        return userDto;
+    }
+
+    public SimplifiedAppUserDto simpleUser(final AppUser appUser) {
+        final SimplifiedAppUserDto userDto = new SimplifiedAppUserDto();
+        userDto.setId(appUser.getId());
+        userDto.setEmployeeNo(appUser.getEmployeeNo());
+        userDto.setFirstName(appUser.getFirstName());
+        userDto.setMiddleName(appUser.getMiddleName());
+        userDto.setLastName(appUser.getLastName());
+        userDto.setContactNo(appUser.getContactNo());
+        userDto.setEmail(appUser.getEmail());
+        userDto.setPicUrl(appUser.getPicUrl());
         return userDto;
     }
 

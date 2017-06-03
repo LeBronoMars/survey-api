@@ -3,6 +3,7 @@ package com.avinnovz.survey.services;
 import com.avinnovz.survey.dto.choice.ChoiceDto;
 import com.avinnovz.survey.dto.questions.CreateQuestionDto;
 import com.avinnovz.survey.dto.questions.QuestionDto;
+import com.avinnovz.survey.dto.questions.SimplifiedQuestionDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.models.AppUser;
 import com.avinnovz.survey.models.Choice;
@@ -99,8 +100,22 @@ public class QuestionService {
             }
             questionDto.setChoices(choiceDtos);
             questionDto.setQuestionType(question.getQuestionType());
-            questionDto.setCreatedBy(appUserService.convert(question.getCreatedBy()));
-            questionDto.setUpdatedBy(appUserService.convert(question.getUpdatedBy()));
+            questionDto.setCreatedBy(appUserService.simpleUser(question.getCreatedBy()));
+            questionDto.setUpdatedBy(appUserService.simpleUser(question.getUpdatedBy()));
+            return questionDto;
+        }
+    }
+
+    public SimplifiedQuestionDto simpleQuestion(final Question question) {
+        if (question == null) {
+            return null;
+        } else {
+            final SimplifiedQuestionDto questionDto = new SimplifiedQuestionDto();
+            questionDto.setId(question.getId());
+            questionDto.setName(question.getName());
+            questionDto.setQuestionType(question.getQuestionType());
+            questionDto.setCreatedBy(appUserService.simpleUser(question.getCreatedBy()));
+            questionDto.setUpdatedBy(appUserService.simpleUser(question.getUpdatedBy()));
             return questionDto;
         }
     }

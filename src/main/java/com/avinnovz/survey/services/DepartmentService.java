@@ -3,6 +3,7 @@ package com.avinnovz.survey.services;
 import com.avinnovz.survey.dto.department.CreateDepartmentDto;
 import com.avinnovz.survey.dto.department.DepartmentDto;
 import com.avinnovz.survey.dto.user.AppUserDto;
+import com.avinnovz.survey.dto.user.SimplifiedAppUserDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.models.AppUser;
 import com.avinnovz.survey.models.Department;
@@ -108,9 +109,9 @@ public class DepartmentService {
             departmentDto.setActive(department.getActive());
             departmentDto.setName(department.getName());
             departmentDto.setDescription(department.getDescription());
-            final ArrayList<AppUserDto> members = new ArrayList<>();
+            final ArrayList<SimplifiedAppUserDto> members = new ArrayList<>();
             for (AppUser appUser : department.getMembers()) {
-                members.add(appUserService.convert(appUser));
+                members.add(appUserService.simpleUser(appUser));
             }
             departmentDto.setMembers(members);
             return departmentDto;

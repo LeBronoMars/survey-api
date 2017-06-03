@@ -1,6 +1,6 @@
 package com.avinnovz.survey.dto.department;
 
-import com.avinnovz.survey.dto.user.AppUserDto;
+import com.avinnovz.survey.dto.user.SimplifiedAppUserDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -29,5 +29,5 @@ public class DepartmentDto {
 
     private String description;
 
-    private List<AppUserDto> members;
+    private List<SimplifiedAppUserDto> members;
 }

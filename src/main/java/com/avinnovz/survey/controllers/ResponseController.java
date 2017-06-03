@@ -70,8 +70,6 @@ public class ResponseController {
             } else {
                 final Response newResponse = responseService.createResponse(createResponseDto, questionnaire, appUser);
                 final ResponseDto responseDto = responseService.convert(newResponse);
-
-                log.info("REST request successfully created : {}", responseDto);
                 return ResponseEntity.created(new URI("/api/responses/" + newResponse.getId())).body(responseDto);
             }
         } catch (CustomException e) {

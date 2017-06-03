@@ -4,6 +4,7 @@ import com.avinnovz.survey.dto.answer.AnswerDto;
 import com.avinnovz.survey.dto.answer.CreateAnswerDto;
 import com.avinnovz.survey.dto.response.CreateResponseDto;
 import com.avinnovz.survey.dto.response.ResponseDto;
+import com.avinnovz.survey.enums.QuestionType;
 import com.avinnovz.survey.models.AppUser;
 import com.avinnovz.survey.models.Questionnaire;
 import com.avinnovz.survey.models.response.Answer;
@@ -63,13 +64,15 @@ public class ResponseService {
         for (CreateAnswerDto createAnswerDto : createResponseDto.getAnswers()) {
             final Answer answer = new Answer();
             answer.setId(null);
-            answer.setAnswer(createAnswerDto.getAnswer());
             answer.setResponse(response.getId());
 
-            if (createAnswerDto.getQuestionMode() != null) {
+            if (createAnswerDto.getQuestionMode() == QuestionType.MULTIPLE_CHOICES.toString()) {
                 answer.setQuestionId(createAnswerDto.getQuestionId());
                 answer.setQuestionMode(createAnswerDto.getQuestionMode());
                 answer.setChoiceId(createAnswerDto.getChoiceId());
+                answer.setAnswer(null);
+            } else {
+                answer.setAnswer(createAnswerDto.getAnswer());
             }
             answerRepository.save(answer);
             answers.add(answer);
@@ -104,22 +107,18 @@ public class ResponseService {
 
             for (Answer answer : response.getAnswers()) {
                 final AnswerDto answerDto = new AnswerDto();
-                log.info("REST 1. QUESTION ID : {}", answer.getQuestionId());
                 answerDto.setAnswer(answer.getAnswer());
-                answerDto.setQuestionDto(questionService.convert(questionService.findOne(answer.getQuestionId())));
-                log.info("REST 2. QUESTION NAME : {}", answerDto.getQuestionDto().getName());
-
+                answerDto.setQuestion(questionService.simpleQuestion(questionService.findOne(answer.getQuestionId())));
 
                 if (answer.getChoiceId() != null) {
                     answerDto.setQuestionMode(answer.getQuestionMode());
-                    log.info("REST 3. CHOICE ID : {}", answer.getChoiceId());
                     answerDto.setChoice(choiceService.convert(choiceService.findOne(answer.getChoiceId())));
-                    log.info("REST 4. CHOICE NAME : {}", answerDto.getAnswer());
                 }
+                answerDtos.add(answerDto);
             }
 
             responseDto.setAnswers(answerDtos);
-            responseDto.setConductedBy(appUserService.convert(response.getConductedBy()));
+            responseDto.setConductedBy(appUserService.simpleUser(response.getConductedBy()));
             return responseDto;
         }
     }
