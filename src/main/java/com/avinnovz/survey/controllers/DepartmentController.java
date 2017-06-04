@@ -3,10 +3,14 @@ package com.avinnovz.survey.controllers;
 import com.avinnovz.survey.dto.department.CreateDepartmentDto;
 import com.avinnovz.survey.dto.department.DepartmentDto;
 import com.avinnovz.survey.dto.department.MembersDepartmentDto;
+import com.avinnovz.survey.dto.questions.CreateQuestionDto;
+import com.avinnovz.survey.dto.questions.QuestionDto;
 import com.avinnovz.survey.exceptions.CustomException;
 import com.avinnovz.survey.exceptions.NotFoundException;
 import com.avinnovz.survey.models.AppUser;
 import com.avinnovz.survey.models.Department;
+import com.avinnovz.survey.models.Question;
+import com.avinnovz.survey.models.Questionnaire;
 import com.avinnovz.survey.services.AppUserService;
 import com.avinnovz.survey.services.DepartmentService;
 import io.swagger.annotations.Api;
@@ -111,6 +115,64 @@ public class DepartmentController {
     }
 
     /**
+     * soft delete department by id
+     */
+    @RequestMapping(value = "/department/{id}",
+            method = RequestMethod.DELETE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Bearer {{token}}",
+                    required = true, dataType = "string", paramType = "header")
+    })
+    public ResponseEntity<?> softDeleteDepartment(@PathVariable String id) {
+        final Department department = departmentService.findDepartmentById(id);
+        log.info("REST request to soft delete Department : {}", department);
+
+        if (department == null) {
+            return new ResponseEntity<>(Collections.singletonMap("message", "Department record not found."), HttpStatus.NOT_FOUND);
+        } else {
+            if (department.getMembers().isEmpty()) {
+                department.setActive(false);
+                departmentService.update(department);
+                return new ResponseEntity<>(Collections.singletonMap("message", "Department successfully deleted."), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(Collections.singletonMap("message", "Remove all associated member first in this department."), HttpStatus.BAD_REQUEST);
+            }
+        }
+    }
+
+    /**
+     * update existing department record
+     */
+    @RequestMapping(value = "/department/{id}",
+            method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Bearer {{token}}",
+                    required = true, dataType = "string", paramType = "header")
+    })
+    public ResponseEntity<?> updateDepartment(@PathVariable String id, @Valid @RequestBody CreateDepartmentDto createDepartmentDto) throws URISyntaxException {
+        log.info("REST request to update department : {}", createDepartmentDto);
+        try {
+            final Optional<Department> existingDepartment = departmentService.findByNameAndIdNot(createDepartmentDto.getName(), id);
+
+            if (existingDepartment.isPresent()) {
+                return new ResponseEntity<>(Collections.singletonMap("message", "Department name already existing."), HttpStatus.BAD_REQUEST);
+            } else {
+                final Department department = departmentService.findDepartmentById(id);
+                department.setName(createDepartmentDto.getName());
+                department.setDescription(createDepartmentDto.getDescription());
+                departmentService.update(department);
+                return ResponseEntity.ok(departmentService.findOne(id));
+            }
+        } catch (CustomException e) {
+            return new ResponseEntity<>(Collections.singletonMap("message", e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(Collections.singletonMap("message", e.getLocalizedMessage()), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /**
      * get departments of currently logged in member
      */
     @RequestMapping(value = "/my_departments",
@@ -173,7 +235,7 @@ public class DepartmentController {
     })
     public ResponseEntity<?> removeMemberFromDepartment(@Valid @RequestBody MembersDepartmentDto
                                                                 membersDepartmentDto) {
-        log.info("REST request to remove member(s0 from department : {}", membersDepartmentDto);
+        log.info("REST request to remove member(s) from department : {}", membersDepartmentDto);
         final Department department = departmentService.findDepartmentById(membersDepartmentDto.getDepartmentId());
 
         if (department == null) {

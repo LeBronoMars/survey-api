@@ -34,7 +34,7 @@ public class DepartmentService {
     private AppUserService appUserService;
 
     public Department createDepartment(final CreateDepartmentDto createDepartmentDto) {
-        final Optional<Department> existingDepartment = departmentRepository.findByName(createDepartmentDto.getName());
+        final Optional<Department> existingDepartment = departmentRepository.findByNameAndActive(createDepartmentDto.getName(), true);
 
         if (existingDepartment.isPresent()) {
             throw new CustomException("Department name: '" + createDepartmentDto.getName() + "' already in use.");
@@ -57,7 +57,7 @@ public class DepartmentService {
     }
 
     public Page<Department> findAll(Pageable pageable) {
-        return departmentRepository.findAll(pageable);
+        return departmentRepository.findByActive(pageable, true);
     }
 
     public DepartmentDto findOne(final String id) {
@@ -96,6 +96,10 @@ public class DepartmentService {
         final ArrayList<AppUser> appUsers = new ArrayList<>();
         appUsers.add(appUser);
         return departmentRepository.findByMembersIn(appUsers);
+    }
+
+    public Optional<Department> findByNameAndIdNot(String name, String id) {
+        return departmentRepository.findByNameAndIdNotAndActive(name, id, true);
     }
 
     public DepartmentDto convert(final Department department) {

@@ -14,11 +14,13 @@ import java.util.Optional;
  */
 public interface DepartmentRepository extends CrudRepository<Department, String> {
 
-    Optional<Department> findByName(String name);
+    Optional<Department> findByNameAndActive(String name, boolean isActive);
 
-    Page<Department> findAll(Pageable pageable);
+    Page<Department> findByActive(Pageable pageable, boolean isActive);
 
     List<Department> findByMembersIn(List<AppUser> appUsers);
+
+    Optional<Department> findByNameAndIdNotAndActive(String name, String id, boolean isActive);
 
     void deleteByMembersIn(String id, List<AppUser> appUsers);
 }

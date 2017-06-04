@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 public class Department extends BaseModel {
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String name;
 
     private String description;
